@@ -3,7 +3,7 @@
 ####
 
 stack = []
-# {75: [29, 53, 47, 61], 47: [61, 53, 29], 61: [29, 53], 53: [29]}
+aocMatrix = {75: [29, 53, 47, 61], 47: [61, 53, 29], 61: [29, 53], 53: [29]}
 adjacencyMatrix = {
     1: [2, 3, 4],
     2: [5, 6],
@@ -16,17 +16,20 @@ adjacencyMatrix = {
 
 
 def topologicalSort(node: int, listOfAdjacentNodes: list) -> None:
-    if node not in stack:
-        stack.append(node)
-    if not listOfAdjacentNodes:
-        return
-    for node in listOfAdjacentNodes:
+    if (not listOfAdjacentNodes) and (node not in stack):
+        stack.insert(0, node)
+
+    for eachNode in listOfAdjacentNodes.copy():
         topologicalSort(
-            node=node,
-            listOfAdjacentNodes=adjacencyMatrix.get(node, []),
+            node=eachNode,
+            listOfAdjacentNodes=adjacencyMatrix.get(eachNode, []),
         )
+        listOfAdjacentNodes.remove(eachNode)
+
+    if node not in stack:
+        stack.insert(0, node)
 
 
 if __name__ == "__main__":
-    topologicalSort(1, adjacencyMatrix[1])
+    topologicalSort(75, aocMatrix[75])
     print(stack)
